@@ -1,2 +1,2 @@
-# Kaggle-zomato
+# Kaggle
 Zomato Restaurants EDA
