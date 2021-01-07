@@ -1,13 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
-# This Python 3 environment comes with many helpful analytics libraries installed
-# It is defined by the kaggle/python docker image: https://github.com/kaggle/docker-python
-# For example, here's several helpful packages to load in 
-
 import numpy as np # linear algebra
 import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import matplotlib.pyplot as plt
@@ -24,16 +14,11 @@ for dirname, _, filenames in os.walk('/kaggle/input'):
 # Any results you write to the current directory are saved as output.
 
 
-# In[2]:
+
 
 
 X=np.load('/kaggle/input/sign-language-digits-dataset/Sign-language-digits-dataset/X.npy')
 Y=np.load('/kaggle/input/sign-language-digits-dataset/Sign-language-digits-dataset/Y.npy')
-
-
-# In[5]:
-
-
 print("Input shape: [%s,%s,%s]" %X.shape)
 print("Output shape: [%s,%s]" %Y.shape)
 
@@ -43,21 +28,13 @@ print("Output shape: [%s,%s]" %Y.shape)
 
 # #### For simplicity sake, we will use sign 0 and 1 only
 
-# In[6]:
-
 
 zero=Y[204:408]
 one=Y[822:1027]
 
 
-# In[7]:
-
-
 y_zero=np.zeros(len(zero))
 y_one=np.ones(len(one))
-
-
-# In[8]:
 
 
 x_zero=X[204:408]
@@ -67,23 +44,14 @@ b=np.concatenate((y_zero,y_one)).reshape(1,409)
 a=np.concatenate((x_zero,x_one)).reshape(-1,409)
 
 
-# In[9]:
-
-
 print("Each example has  %s features/pixels" %a.shape[0])
 print("There are %s examples" %a.shape[1])
 print("There are %s targets" %b.shape[1])
 print("Each examples is a %s by %s grid of pixels" %(np.sqrt(a.shape[0]),np.sqrt(a.shape[0])))
 
 
-# In[10]:
-
-
 plt.imshow(x_zero[2])
 plt.show()
-
-
-# In[3]:
 
 
 plt.imshow(x_one[3])
@@ -98,28 +66,19 @@ plt.imshow(x_one[3])
 # 4. Compute Backward propagation
 # 5. Update Parameters
 
-# In[12]:
 
 
 from sklearn.model_selection import train_test_split
 
 
-# In[77]:
-
-
 X_train, X_test, y_train, y_test = train_test_split(a.T, b.T, test_size=0.10, random_state=42)
-
-
-# In[78]:
-
-
 X_train=X_train.T
 X_test=X_test.T
 y_train=y_train.T
 y_test=y_test.T
 
 
-# In[79]:
+
 
 
 # n_h = total features
@@ -254,19 +213,12 @@ def fn_predict(A3):
     return Y_pred
 
 
-# In[81]:
-
-
-
-# In[4]:
-
 
 cost_df=pd.DataFrame()
 cost_df['index']=0
 cost_df['cost']=0
 
 
-# In[88]:
 
 
 def model(X_train,y_train,learning_rate,layer_dims,iterations):
@@ -294,32 +246,18 @@ def model(X_train,y_train,learning_rate,layer_dims,iterations):
     plt.plot(cost_df['index'],cost_df['cost'])        
 
 
-# In[89]:
-
-
 layer_dims=[X_train.shape[0],10,5,1]
 learning_rate=.1
-
-
-# In[90]:
-
-
 model(X_train,y_train,learning_rate,layer_dims,1000)
-
-
-# In[5]:
-
-
 from tensorflow.python.framework import ops
 ops.reset_default_graph()
 
 
-# In[6]:
 
 
 # ### Model through Tensorflow - For 2 classes
 
-# In[61]:
+
 
 
 X_train.shape
@@ -334,20 +272,14 @@ import tensorflow as tf2
 import tensorflow.compat.v1 as tf
 tf.disable_v2_behavior()
 
-# In[85]:
 
 
 #tf.reset_default_graph()
 
 
-# In[86]:
-
 
 x=tf.placeholder(tf.float32,shape=(4096,None),name='x')
 y=tf.placeholder(tf.float32,shape=(1,None),name='y')
-
-
-# In[87]:
 
 
 ## initialize params
@@ -357,9 +289,6 @@ W2=tf.get_variable('W2',shape=[5,10],dtype=tf.float32,initializer=tf2.initialize
 b2=tf.get_variable('b2',shape=[5,1],dtype=tf.float32,initializer=tf.zeros_initializer())
 W3=tf.get_variable('W3',shape=[1,5],dtype=tf.float32,initializer=tf2.initializers.GlorotUniform(seed=1))
 b3=tf.get_variable('b3',shape=[1,1],dtype=tf.float32,initializer=tf.zeros_initializer())
-
-
-# In[88]:
 
 
 ## Forward prop
@@ -372,21 +301,17 @@ A2=tf.nn.relu(Z2)
 Z3=tf.add(tf.matmul(W3,A2),b3)
 
 
-# In[89]:
-
 
 ## Compute Cost
 cost=tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=tf.transpose(Z3),labels=tf.transpose(y)))
 
-
-# In[90]:
 
 
 ## Backward Prop
 back_prop=tf.train.GradientDescentOptimizer(learning_rate=.01).minimize(cost)
 
 
-# In[91]:
+
 
 
 with tf.Session() as sess:
@@ -409,28 +334,4 @@ with tf.Session() as sess:
     print('\n')
     print('Train Accuracy is %s' %accuracy.eval({x:X_train,y:y_train}))
     print('Test Accuracy is %s' %accuracy.eval({x:X_test,y:y_test}))
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
 
